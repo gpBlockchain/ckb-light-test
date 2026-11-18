@@ -28,7 +28,8 @@ jobs:
       fail-fast: false
       matrix:
         net: ['testnet_v1']
-    runs-on: ubuntu-latest
+        rusqlite: [true, false]
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +43,7 @@ jobs:
         env:
           CKB_LIGHT_CLIENT_URL: ${{ github.event.inputs.ckb_light_client_url || 'https://github.com/nervosnetwork/ckb-light-client.git' }}
           CKB_LIGHT_CLIENT_BRANCH: ${{ github.event.inputs.ckb_light_client_branch || 'develop' }}
-          RUSQLITE: ${{ github.event.inputs.rusqlite }}
+          RUSQLITE: ${{ matrix.rusqlite && '1' || '' }}
         run: |
           npm install --save-dev mocha @types/mocha chai @types/chai
           sh prepare_dev.sh
